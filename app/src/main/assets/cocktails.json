@@ -1,0 +1,1067 @@
+{
+  "recipes": [
+    {
+      "id": "margarita",
+      "name": "Margarita",
+      "glass": "Rocks glass",
+      "description": "The perfect balance of agave, citrus, and orange liqueur — the world's favorite tequila cocktail.",
+      "ingredients": [
+        { "id": "tequila", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "1 oz" },
+        { "id": "triple_sec", "amount": "3/4 oz" },
+        { "id": "salt", "amount": "for the rim", "optional": true }
+      ],
+      "instructions": [
+        "Rub a lime wedge around half the rim of a rocks glass and dip it in salt.",
+        "Shake tequila, lime juice, and triple sec hard with ice.",
+        "Strain into the glass over fresh ice and garnish with a lime wheel."
+      ],
+      "tags": ["classic", "sour", "tequila"]
+    },
+    {
+      "id": "tommys_margarita",
+      "name": "Tommy's Margarita",
+      "glass": "Rocks glass",
+      "description": "A modern San Francisco classic: the Margarita stripped to tequila, lime, and agave.",
+      "ingredients": [
+        { "id": "tequila", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "1 oz" },
+        { "id": "agave_syrup", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Shake everything hard with ice.",
+        "Strain into a rocks glass over fresh ice and garnish with a lime wedge."
+      ],
+      "tags": ["modern", "sour", "tequila"]
+    },
+    {
+      "id": "paloma",
+      "name": "Paloma",
+      "glass": "Highball glass",
+      "description": "Mexico's everyday favorite — brighter and more refreshing than a Margarita.",
+      "ingredients": [
+        { "id": "tequila", "amount": "2 oz" },
+        { "id": "grapefruit_juice", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "1/2 oz" },
+        { "id": "simple_syrup", "amount": "1/2 oz" },
+        { "id": "soda_water", "amount": "top" },
+        { "id": "salt", "amount": "for the rim", "optional": true }
+      ],
+      "instructions": [
+        "Build tequila, grapefruit juice, lime juice, and syrup in a salt-rimmed highball over ice.",
+        "Stir briefly, top with soda water, and garnish with a grapefruit wedge."
+      ],
+      "tags": ["refreshing", "tequila", "highball"]
+    },
+    {
+      "id": "tequila_sunrise",
+      "name": "Tequila Sunrise",
+      "glass": "Highball glass",
+      "description": "A 70s icon — orange juice and tequila with a grenadine sunrise sinking to the bottom.",
+      "ingredients": [
+        { "id": "tequila", "amount": "2 oz" },
+        { "id": "orange_juice", "amount": "4 oz" },
+        { "id": "grenadine", "amount": "1/4 oz" },
+        { "id": "cherry", "amount": "1, to garnish", "optional": true }
+      ],
+      "instructions": [
+        "Build tequila and orange juice in a highball over ice and stir.",
+        "Slowly pour grenadine down the inside of the glass so it settles at the bottom.",
+        "Garnish with an orange slice and a cherry."
+      ],
+      "tags": ["fruity", "tequila", "retro"]
+    },
+    {
+      "id": "oaxaca_old_fashioned",
+      "name": "Oaxaca Old Fashioned",
+      "glass": "Rocks glass",
+      "description": "Death & Co's agave-powered spin on the Old Fashioned — tequila and smoky mezcal.",
+      "ingredients": [
+        { "id": "tequila", "amount": "1 1/2 oz" },
+        { "id": "mezcal", "amount": "1/2 oz" },
+        { "id": "agave_syrup", "amount": "1 tsp" },
+        { "id": "angostura_bitters", "amount": "2 dashes" }
+      ],
+      "instructions": [
+        "Stir all ingredients with ice until well chilled.",
+        "Strain over a large cube in a rocks glass and garnish with a flamed orange peel."
+      ],
+      "tags": ["spirit-forward", "modern", "mezcal"]
+    },
+    {
+      "id": "naked_and_famous",
+      "name": "Naked & Famous",
+      "glass": "Coupe",
+      "description": "A smoky, bittersweet modern classic in perfect equal parts (traditionally with yellow Chartreuse — green works with a lighter hand).",
+      "ingredients": [
+        { "id": "mezcal", "amount": "3/4 oz" },
+        { "id": "aperol", "amount": "3/4 oz" },
+        { "id": "green_chartreuse", "amount": "3/4 oz" },
+        { "id": "lime_juice", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Shake all ingredients with ice.",
+        "Strain into a chilled coupe."
+      ],
+      "tags": ["modern", "smoky", "equal-parts"]
+    },
+    {
+      "id": "daiquiri",
+      "name": "Daiquiri",
+      "glass": "Coupe",
+      "description": "Rum, lime, and sugar — the drink bartenders order to judge other bartenders.",
+      "ingredients": [
+        { "id": "white_rum", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "1 oz" },
+        { "id": "simple_syrup", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Shake everything hard with ice until frosty.",
+        "Double-strain into a chilled coupe and garnish with a lime wheel."
+      ],
+      "tags": ["classic", "sour", "rum"]
+    },
+    {
+      "id": "strawberry_daiquiri",
+      "name": "Strawberry Daiquiri",
+      "glass": "Coupe",
+      "description": "The classic Daiquiri with fresh strawberries shaken right in — no blender required.",
+      "ingredients": [
+        { "id": "white_rum", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "3/4 oz" },
+        { "id": "simple_syrup", "amount": "3/4 oz" },
+        { "id": "strawberry", "amount": "3, hulled" }
+      ],
+      "instructions": [
+        "Muddle the strawberries with the syrup in a shaker.",
+        "Add rum, lime juice, and ice; shake hard.",
+        "Double-strain into a chilled coupe and garnish with a strawberry."
+      ],
+      "tags": ["fruity", "rum", "summer"]
+    },
+    {
+      "id": "mojito",
+      "name": "Mojito",
+      "glass": "Highball glass",
+      "description": "Cuba's minty, effervescent classic — summer in a glass.",
+      "ingredients": [
+        { "id": "white_rum", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "1 oz" },
+        { "id": "simple_syrup", "amount": "3/4 oz" },
+        { "id": "mint", "amount": "8 leaves, plus a sprig" },
+        { "id": "soda_water", "amount": "top" }
+      ],
+      "instructions": [
+        "Gently press the mint leaves with the syrup in the bottom of a highball.",
+        "Add rum, lime juice, and crushed ice; stir until the glass frosts.",
+        "Top with soda water and garnish with a fat mint sprig."
+      ],
+      "tags": ["refreshing", "rum", "classic"]
+    },
+    {
+      "id": "pina_colada",
+      "name": "Piña Colada",
+      "glass": "Hurricane or highball glass",
+      "description": "Puerto Rico's creamy pineapple-coconut escape hatch.",
+      "ingredients": [
+        { "id": "white_rum", "amount": "2 oz" },
+        { "id": "pineapple_juice", "amount": "3 oz" },
+        { "id": "coconut_cream", "amount": "1 1/2 oz" },
+        { "id": "cherry", "amount": "1, to garnish", "optional": true }
+      ],
+      "instructions": [
+        "Shake everything very hard with ice (or blend with a cup of ice).",
+        "Pour into a tall glass and garnish with pineapple and a cherry."
+      ],
+      "tags": ["tropical", "creamy", "rum"]
+    },
+    {
+      "id": "mai_tai",
+      "name": "Mai Tai",
+      "glass": "Rocks glass",
+      "description": "Trader Vic's tiki masterpiece — rum, lime, orange, and almond.",
+      "ingredients": [
+        { "id": "white_rum", "amount": "1 1/2 oz" },
+        { "id": "dark_rum", "amount": "1/2 oz, floated" },
+        { "id": "triple_sec", "amount": "1/2 oz" },
+        { "id": "orgeat", "amount": "1/2 oz" },
+        { "id": "lime_juice", "amount": "1 oz" },
+        { "id": "mint", "amount": "sprig, to garnish", "optional": true }
+      ],
+      "instructions": [
+        "Shake white rum, triple sec, orgeat, and lime juice with crushed ice.",
+        "Pour unstrained into a rocks glass and float the dark rum on top.",
+        "Garnish with mint and a spent lime shell."
+      ],
+      "tags": ["tiki", "rum", "classic"]
+    },
+    {
+      "id": "dark_n_stormy",
+      "name": "Dark 'n' Stormy",
+      "glass": "Highball glass",
+      "description": "Bermuda's national drink: dark rum thunderheads over a spicy ginger sea.",
+      "ingredients": [
+        { "id": "dark_rum", "amount": "2 oz" },
+        { "id": "ginger_beer", "amount": "4 oz" },
+        { "id": "lime_juice", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Fill a highball with ice and add lime juice and ginger beer.",
+        "Float the dark rum on top and garnish with a lime wedge."
+      ],
+      "tags": ["highball", "rum", "spicy"]
+    },
+    {
+      "id": "cuba_libre",
+      "name": "Cuba Libre",
+      "glass": "Highball glass",
+      "description": "A rum and coke that earned its name — the lime makes all the difference.",
+      "ingredients": [
+        { "id": "white_rum", "amount": "2 oz" },
+        { "id": "cola", "amount": "4 oz" },
+        { "id": "lime_juice", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Build rum and lime juice in a highball over ice.",
+        "Top with cola, stir once, and garnish with a lime wedge."
+      ],
+      "tags": ["highball", "rum", "easy"]
+    },
+    {
+      "id": "caipirinha",
+      "name": "Caipirinha",
+      "glass": "Rocks glass",
+      "description": "Brazil's national cocktail — muddled lime and sugar with grassy cachaça.",
+      "ingredients": [
+        { "id": "cachaca", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "1/2 lime, cut in wedges" },
+        { "id": "simple_syrup", "amount": "2 tsp sugar" }
+      ],
+      "instructions": [
+        "Muddle the lime wedges with the sugar in a sturdy rocks glass.",
+        "Fill with crushed ice, add cachaça, and stir well."
+      ],
+      "tags": ["classic", "refreshing"]
+    },
+    {
+      "id": "rum_punch",
+      "name": "Planter's Punch",
+      "glass": "Highball glass",
+      "description": "An old Caribbean formula: one of sour, two of sweet, three of strong, four of weak.",
+      "ingredients": [
+        { "id": "dark_rum", "amount": "2 oz" },
+        { "id": "orange_juice", "amount": "1 1/2 oz" },
+        { "id": "pineapple_juice", "amount": "1 1/2 oz" },
+        { "id": "lime_juice", "amount": "1/2 oz" },
+        { "id": "grenadine", "amount": "1/4 oz" },
+        { "id": "angostura_bitters", "amount": "2 dashes", "optional": true }
+      ],
+      "instructions": [
+        "Shake everything with ice.",
+        "Pour over fresh ice in a tall glass and garnish with whatever fruit is nearby."
+      ],
+      "tags": ["tropical", "fruity", "rum"]
+    },
+    {
+      "id": "old_fashioned",
+      "name": "Old Fashioned",
+      "glass": "Rocks glass",
+      "description": "The original cocktail: spirit, sugar, bitters, and nothing to hide behind.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 oz" },
+        { "id": "simple_syrup", "amount": "1/4 oz" },
+        { "id": "angostura_bitters", "amount": "2 dashes" }
+      ],
+      "instructions": [
+        "Stir bourbon, syrup, and bitters with ice until well chilled.",
+        "Strain over a large cube in a rocks glass.",
+        "Express an orange peel over the top and drop it in."
+      ],
+      "tags": ["classic", "spirit-forward", "whiskey"]
+    },
+    {
+      "id": "manhattan",
+      "name": "Manhattan",
+      "glass": "Coupe",
+      "description": "Rye and sweet vermouth in perfect proportion — the king of stirred cocktails.",
+      "ingredients": [
+        { "id": "rye_whiskey", "amount": "2 oz" },
+        { "id": "sweet_vermouth", "amount": "1 oz" },
+        { "id": "angostura_bitters", "amount": "2 dashes" },
+        { "id": "cherry", "amount": "1, to garnish", "optional": true }
+      ],
+      "instructions": [
+        "Stir everything with ice until well chilled.",
+        "Strain into a chilled coupe and garnish with a cocktail cherry."
+      ],
+      "tags": ["classic", "spirit-forward", "whiskey"]
+    },
+    {
+      "id": "whiskey_sour",
+      "name": "Whiskey Sour",
+      "glass": "Rocks glass",
+      "description": "Bourbon, lemon, and sugar — add the egg white for a silky classic texture.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "simple_syrup", "amount": "3/4 oz" },
+        { "id": "egg_white", "amount": "1", "optional": true },
+        { "id": "angostura_bitters", "amount": "2 dashes, on the foam", "optional": true }
+      ],
+      "instructions": [
+        "If using egg white, shake everything without ice first.",
+        "Add ice and shake hard, then strain over fresh ice in a rocks glass.",
+        "Dot bitters on the foam if you like."
+      ],
+      "tags": ["classic", "sour", "whiskey"]
+    },
+    {
+      "id": "boulevardier",
+      "name": "Boulevardier",
+      "glass": "Rocks glass",
+      "description": "A Negroni that traded gin for bourbon and put on a winter coat.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "1 1/4 oz" },
+        { "id": "campari", "amount": "1 oz" },
+        { "id": "sweet_vermouth", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Stir everything with ice until well chilled.",
+        "Strain over a large cube and garnish with an orange peel."
+      ],
+      "tags": ["bitter", "spirit-forward", "whiskey"]
+    },
+    {
+      "id": "mint_julep",
+      "name": "Mint Julep",
+      "glass": "Julep cup or rocks glass",
+      "description": "Kentucky's frosted-cup classic — bourbon over a mountain of crushed ice.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 1/2 oz" },
+        { "id": "mint", "amount": "8 leaves, plus a bouquet" },
+        { "id": "simple_syrup", "amount": "1/4 oz" }
+      ],
+      "instructions": [
+        "Gently press the mint with the syrup in the bottom of the cup.",
+        "Pack with crushed ice, add bourbon, and stir until the cup frosts.",
+        "Crown with more crushed ice and a big bouquet of mint."
+      ],
+      "tags": ["classic", "whiskey", "refreshing"]
+    },
+    {
+      "id": "whiskey_highball",
+      "name": "Whiskey Highball",
+      "glass": "Highball glass",
+      "description": "Two ingredients, endlessly refreshing — treat it with Japanese precision.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 oz" },
+        { "id": "soda_water", "amount": "4 oz" }
+      ],
+      "instructions": [
+        "Fill a chilled highball with ice and add the whiskey.",
+        "Top gently with cold soda water and stir once."
+      ],
+      "tags": ["highball", "easy", "whiskey"]
+    },
+    {
+      "id": "gold_rush",
+      "name": "Gold Rush",
+      "glass": "Rocks glass",
+      "description": "A modern New York classic — a Whiskey Sour that struck honey.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "honey_syrup", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Shake everything hard with ice.",
+        "Strain over a large cube in a rocks glass."
+      ],
+      "tags": ["modern", "sour", "whiskey"]
+    },
+    {
+      "id": "penicillin",
+      "name": "Penicillin",
+      "glass": "Rocks glass",
+      "description": "Sam Ross's modern legend: scotch, lemon, honey, and ginger — doctor's orders.",
+      "ingredients": [
+        { "id": "scotch", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "honey_syrup", "amount": "3/4 oz" },
+        { "id": "fresh_ginger", "amount": "3 thin slices" }
+      ],
+      "instructions": [
+        "Muddle the ginger in a shaker, then add scotch, lemon, and honey syrup.",
+        "Shake hard with ice and double-strain over a large cube.",
+        "If you have a smoky Islay scotch, float a quarter ounce on top."
+      ],
+      "tags": ["modern", "sour", "scotch"]
+    },
+    {
+      "id": "sazerac",
+      "name": "Sazerac",
+      "glass": "Rocks glass, no ice",
+      "description": "New Orleans in a glass: rye, Peychaud's, and an absinthe-perfumed chill.",
+      "ingredients": [
+        { "id": "rye_whiskey", "amount": "2 oz" },
+        { "id": "simple_syrup", "amount": "1/4 oz" },
+        { "id": "peychauds_bitters", "amount": "3 dashes" },
+        { "id": "absinthe", "amount": "rinse" }
+      ],
+      "instructions": [
+        "Rinse a chilled rocks glass with absinthe and dump the excess.",
+        "Stir rye, syrup, and bitters with ice, then strain into the glass (no ice).",
+        "Express a lemon peel over the top — tradition says don't drop it in."
+      ],
+      "tags": ["classic", "spirit-forward", "whiskey"]
+    },
+    {
+      "id": "hot_toddy",
+      "name": "Hot Toddy",
+      "glass": "Mug",
+      "description": "Whiskey, honey, and lemon in hot water — comfort you can sip.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 oz" },
+        { "id": "honey_syrup", "amount": "1/2 oz" },
+        { "id": "lemon_juice", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Warm a mug with hot water and empty it.",
+        "Add whiskey, honey, and lemon, then top with 4 oz hot water.",
+        "Stir and garnish with a lemon wheel studded with cloves."
+      ],
+      "tags": ["hot", "whiskey", "winter"]
+    },
+    {
+      "id": "irish_coffee",
+      "name": "Irish Coffee",
+      "glass": "Glass mug",
+      "description": "Hot coffee, Irish whiskey, and a cool cream cap — the world's best dessert drink.",
+      "ingredients": [
+        { "id": "irish_whiskey", "amount": "1 1/2 oz" },
+        { "id": "coffee", "amount": "4 oz, hot" },
+        { "id": "simple_syrup", "amount": "1/2 oz" },
+        { "id": "cream", "amount": "1 oz, lightly whipped" }
+      ],
+      "instructions": [
+        "Combine whiskey, hot coffee, and syrup in a warmed glass mug.",
+        "Float lightly whipped cream on top by pouring over the back of a spoon.",
+        "Drink the coffee through the cream — don't stir."
+      ],
+      "tags": ["hot", "creamy", "whiskey"]
+    },
+    {
+      "id": "amaretto_sour",
+      "name": "Amaretto Sour",
+      "glass": "Rocks glass",
+      "description": "Almond liqueur with lemon and a bourbon backbone — far better than its reputation.",
+      "ingredients": [
+        { "id": "amaretto", "amount": "1 1/2 oz" },
+        { "id": "bourbon", "amount": "3/4 oz", "optional": true },
+        { "id": "lemon_juice", "amount": "1 oz" },
+        { "id": "simple_syrup", "amount": "1 tsp" },
+        { "id": "egg_white", "amount": "1", "optional": true }
+      ],
+      "instructions": [
+        "If using egg white, shake everything without ice first.",
+        "Add ice, shake hard, and strain over fresh ice.",
+        "Garnish with a lemon peel and a cherry."
+      ],
+      "tags": ["sour", "sweet", "easy"]
+    },
+    {
+      "id": "negroni",
+      "name": "Negroni",
+      "glass": "Rocks glass",
+      "description": "Equal parts gin, Campari, and sweet vermouth — bitter, bracing, perfect.",
+      "ingredients": [
+        { "id": "gin", "amount": "1 oz" },
+        { "id": "campari", "amount": "1 oz" },
+        { "id": "sweet_vermouth", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Stir everything with ice until well chilled.",
+        "Strain over a large cube and garnish with an orange peel."
+      ],
+      "tags": ["classic", "bitter", "equal-parts"]
+    },
+    {
+      "id": "americano",
+      "name": "Americano",
+      "glass": "Highball glass",
+      "description": "The Negroni's lighter ancestor — Campari and vermouth lengthened with soda.",
+      "ingredients": [
+        { "id": "campari", "amount": "1 1/2 oz" },
+        { "id": "sweet_vermouth", "amount": "1 1/2 oz" },
+        { "id": "soda_water", "amount": "top" }
+      ],
+      "instructions": [
+        "Build Campari and vermouth in a highball over ice.",
+        "Top with soda water and garnish with an orange slice."
+      ],
+      "tags": ["bitter", "low-abv", "refreshing"]
+    },
+    {
+      "id": "aperol_spritz",
+      "name": "Aperol Spritz",
+      "glass": "Large wine glass",
+      "description": "The orange sunset of Italian aperitivo hour.",
+      "ingredients": [
+        { "id": "aperol", "amount": "2 oz" },
+        { "id": "sparkling_wine", "amount": "3 oz" },
+        { "id": "soda_water", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Fill a big wine glass with ice.",
+        "Add prosecco first, then Aperol, then a splash of soda.",
+        "Garnish with an orange slice."
+      ],
+      "tags": ["low-abv", "refreshing", "aperitivo"]
+    },
+    {
+      "id": "gin_tonic",
+      "name": "Gin & Tonic",
+      "glass": "Highball or copa glass",
+      "description": "The two-ingredient classic that rewards good tonic and lots of ice.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "tonic_water", "amount": "4 oz" },
+        { "id": "lime_juice", "amount": "wedge", "optional": true }
+      ],
+      "instructions": [
+        "Fill the glass to the top with ice.",
+        "Add gin, top with tonic, and stir once.",
+        "Garnish with a lime wedge."
+      ],
+      "tags": ["highball", "easy", "gin"]
+    },
+    {
+      "id": "tom_collins",
+      "name": "Tom Collins",
+      "glass": "Collins glass",
+      "description": "Sparkling gin lemonade for grown-ups.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "1 oz" },
+        { "id": "simple_syrup", "amount": "1/2 oz" },
+        { "id": "soda_water", "amount": "top" }
+      ],
+      "instructions": [
+        "Shake gin, lemon juice, and syrup with ice.",
+        "Strain into an ice-filled collins glass and top with soda.",
+        "Garnish with a lemon wheel and a cherry."
+      ],
+      "tags": ["refreshing", "gin", "classic"]
+    },
+    {
+      "id": "gimlet",
+      "name": "Gimlet",
+      "glass": "Coupe",
+      "description": "Gin and lime, crisp and cold — Raymond Chandler approved.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "3/4 oz" },
+        { "id": "simple_syrup", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Shake everything hard with ice.",
+        "Double-strain into a chilled coupe and garnish with a lime wheel."
+      ],
+      "tags": ["classic", "sour", "gin"]
+    },
+    {
+      "id": "martini",
+      "name": "Martini",
+      "glass": "Martini glass",
+      "description": "Gin and dry vermouth, stirred silky — the definition of a cocktail.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 1/2 oz" },
+        { "id": "dry_vermouth", "amount": "1/2 oz" },
+        { "id": "orange_bitters", "amount": "1 dash", "optional": true }
+      ],
+      "instructions": [
+        "Stir gin and vermouth with plenty of ice until ice cold.",
+        "Strain into a chilled martini glass.",
+        "Garnish with a lemon twist or olives."
+      ],
+      "tags": ["classic", "spirit-forward", "gin"]
+    },
+    {
+      "id": "vodka_martini",
+      "name": "Vodka Martini",
+      "glass": "Martini glass",
+      "description": "The Martini's cleaner, colder sibling.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 1/2 oz" },
+        { "id": "dry_vermouth", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Stir vodka and vermouth with plenty of ice until ice cold.",
+        "Strain into a chilled martini glass and garnish with a twist or olives."
+      ],
+      "tags": ["spirit-forward", "vodka"]
+    },
+    {
+      "id": "french_75",
+      "name": "French 75",
+      "glass": "Flute",
+      "description": "Gin and lemon with a champagne charge — named after an artillery piece for a reason.",
+      "ingredients": [
+        { "id": "gin", "amount": "1 oz" },
+        { "id": "lemon_juice", "amount": "1/2 oz" },
+        { "id": "simple_syrup", "amount": "1/2 oz" },
+        { "id": "sparkling_wine", "amount": "3 oz" }
+      ],
+      "instructions": [
+        "Shake gin, lemon juice, and syrup with ice.",
+        "Strain into a flute and top with sparkling wine.",
+        "Garnish with a long lemon twist."
+      ],
+      "tags": ["sparkling", "celebration", "gin"]
+    },
+    {
+      "id": "bramble",
+      "name": "Bramble",
+      "glass": "Rocks glass",
+      "description": "Dick Bradsell's London classic — a gin sour under a blackberry cascade.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "1 oz" },
+        { "id": "simple_syrup", "amount": "1/2 oz" },
+        { "id": "creme_de_mure", "amount": "1/2 oz, drizzled" }
+      ],
+      "instructions": [
+        "Shake gin, lemon juice, and syrup with ice; strain over crushed ice.",
+        "Drizzle the crème de mûre over the top so it bleeds down.",
+        "Garnish with a blackberry and a lemon slice."
+      ],
+      "tags": ["fruity", "gin", "modern-classic"]
+    },
+    {
+      "id": "bees_knees",
+      "name": "Bee's Knees",
+      "glass": "Coupe",
+      "description": "A Prohibition-era gin sour sweetened with honey — 'the bee's knees' meant 'the best'.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "honey_syrup", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Shake everything hard with ice.",
+        "Double-strain into a chilled coupe and garnish with a lemon twist."
+      ],
+      "tags": ["classic", "sour", "gin"]
+    },
+    {
+      "id": "southside",
+      "name": "Southside",
+      "glass": "Coupe",
+      "description": "A gin sour gone minty — the Mojito's city cousin.",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "lime_juice", "amount": "3/4 oz" },
+        { "id": "simple_syrup", "amount": "3/4 oz" },
+        { "id": "mint", "amount": "6 leaves" }
+      ],
+      "instructions": [
+        "Shake everything hard with ice.",
+        "Double-strain into a chilled coupe and garnish with a mint leaf."
+      ],
+      "tags": ["sour", "gin", "refreshing"]
+    },
+    {
+      "id": "clover_club",
+      "name": "Clover Club",
+      "glass": "Coupe",
+      "description": "A pre-Prohibition beauty: gin, lemon, raspberry-red syrup, and silky egg white.",
+      "ingredients": [
+        { "id": "gin", "amount": "1 1/2 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "grenadine", "amount": "3/4 oz" },
+        { "id": "egg_white", "amount": "1" }
+      ],
+      "instructions": [
+        "Shake everything without ice to build the foam.",
+        "Add ice, shake hard, and double-strain into a chilled coupe."
+      ],
+      "tags": ["classic", "sour", "gin"]
+    },
+    {
+      "id": "last_word",
+      "name": "Last Word",
+      "glass": "Coupe",
+      "description": "Four equal parts, one unforgettable drink — a Detroit relic revived into a modern staple.",
+      "ingredients": [
+        { "id": "gin", "amount": "3/4 oz" },
+        { "id": "green_chartreuse", "amount": "3/4 oz" },
+        { "id": "maraschino_liqueur", "amount": "3/4 oz" },
+        { "id": "lime_juice", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Shake everything with ice.",
+        "Double-strain into a chilled coupe."
+      ],
+      "tags": ["classic", "equal-parts", "gin"]
+    },
+    {
+      "id": "martinez",
+      "name": "Martinez",
+      "glass": "Coupe",
+      "description": "The missing link between the Manhattan and the Martini.",
+      "ingredients": [
+        { "id": "gin", "amount": "1 1/2 oz" },
+        { "id": "sweet_vermouth", "amount": "1 1/2 oz" },
+        { "id": "maraschino_liqueur", "amount": "1/4 oz" },
+        { "id": "angostura_bitters", "amount": "2 dashes" }
+      ],
+      "instructions": [
+        "Stir everything with ice until well chilled.",
+        "Strain into a chilled coupe and garnish with a lemon twist."
+      ],
+      "tags": ["classic", "spirit-forward", "gin"]
+    },
+    {
+      "id": "aviation",
+      "name": "Aviation",
+      "glass": "Coupe",
+      "description": "Gin, lemon, and maraschino in a pale sky-colored sour (add crème de violette if you ever find it).",
+      "ingredients": [
+        { "id": "gin", "amount": "2 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "maraschino_liqueur", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Shake everything with ice.",
+        "Double-strain into a chilled coupe and garnish with a cherry."
+      ],
+      "tags": ["classic", "sour", "gin"]
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo Spritz",
+      "glass": "Large wine glass",
+      "description": "The alpine spritz — elderflower, prosecco, and mint.",
+      "ingredients": [
+        { "id": "elderflower_liqueur", "amount": "1 1/2 oz" },
+        { "id": "sparkling_wine", "amount": "3 oz" },
+        { "id": "soda_water", "amount": "1 oz" },
+        { "id": "mint", "amount": "sprig" }
+      ],
+      "instructions": [
+        "Fill a big wine glass with ice and slap the mint sprig into it.",
+        "Add elderflower liqueur, top with prosecco and soda, and stir gently.",
+        "Garnish with a lime slice if you have one."
+      ],
+      "tags": ["low-abv", "sparkling", "refreshing"]
+    },
+    {
+      "id": "moscow_mule",
+      "name": "Moscow Mule",
+      "glass": "Copper mug or highball",
+      "description": "The vodka drink that launched a thousand copper mugs.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "ginger_beer", "amount": "4 oz" },
+        { "id": "lime_juice", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Build vodka and lime juice in an ice-filled mug.",
+        "Top with ginger beer, stir once, and garnish with a lime wedge."
+      ],
+      "tags": ["highball", "vodka", "easy"]
+    },
+    {
+      "id": "cosmopolitan",
+      "name": "Cosmopolitan",
+      "glass": "Martini glass",
+      "description": "The blush-pink 90s icon that's secretly a well-built sour.",
+      "ingredients": [
+        { "id": "vodka", "amount": "1 1/2 oz" },
+        { "id": "triple_sec", "amount": "1 oz" },
+        { "id": "cranberry_juice", "amount": "1 oz" },
+        { "id": "lime_juice", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Shake everything with ice.",
+        "Double-strain into a chilled martini glass and garnish with an orange twist."
+      ],
+      "tags": ["fruity", "vodka", "retro"]
+    },
+    {
+      "id": "espresso_martini",
+      "name": "Espresso Martini",
+      "glass": "Martini glass",
+      "description": "Wake me up, then... — vodka, coffee liqueur, and a fresh shot of espresso.",
+      "ingredients": [
+        { "id": "vodka", "amount": "1 1/2 oz" },
+        { "id": "coffee_liqueur", "amount": "1 oz" },
+        { "id": "coffee", "amount": "1 oz fresh espresso" },
+        { "id": "simple_syrup", "amount": "1/4 oz", "optional": true }
+      ],
+      "instructions": [
+        "Shake everything very hard with ice to build the crema.",
+        "Double-strain into a chilled martini glass.",
+        "Garnish with three coffee beans."
+      ],
+      "tags": ["coffee", "vodka", "after-dinner"]
+    },
+    {
+      "id": "white_russian",
+      "name": "White Russian",
+      "glass": "Rocks glass",
+      "description": "Vodka, coffee liqueur, and cream — the Dude abides.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "coffee_liqueur", "amount": "1 oz" },
+        { "id": "cream", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Build vodka and coffee liqueur in a rocks glass over ice.",
+        "Float the cream on top and stir lazily."
+      ],
+      "tags": ["creamy", "vodka", "after-dinner"]
+    },
+    {
+      "id": "black_russian",
+      "name": "Black Russian",
+      "glass": "Rocks glass",
+      "description": "The White Russian minus the cream — dark, sweet, and simple.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "coffee_liqueur", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Build both ingredients in a rocks glass over ice.",
+        "Stir well."
+      ],
+      "tags": ["easy", "vodka", "after-dinner"]
+    },
+    {
+      "id": "bloody_mary",
+      "name": "Bloody Mary",
+      "glass": "Highball glass",
+      "description": "Brunch's savory centerpiece — season it like you mean it.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "tomato_juice", "amount": "4 oz" },
+        { "id": "lemon_juice", "amount": "1/2 oz" },
+        { "id": "celery", "amount": "1 stalk, to garnish", "optional": true }
+      ],
+      "instructions": [
+        "Combine vodka, tomato juice, and lemon juice with ice and season with salt, pepper, and hot sauce to taste.",
+        "Roll between two mixing glasses (don't shake) to combine.",
+        "Pour into an ice-filled highball and garnish with celery and a lemon wedge."
+      ],
+      "tags": ["savory", "brunch", "vodka"]
+    },
+    {
+      "id": "screwdriver",
+      "name": "Screwdriver",
+      "glass": "Highball glass",
+      "description": "Vodka and orange juice — allegedly stirred with an actual screwdriver by oil workers.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "orange_juice", "amount": "4 oz" }
+      ],
+      "instructions": [
+        "Build in an ice-filled highball and stir.",
+        "Garnish with an orange slice."
+      ],
+      "tags": ["easy", "brunch", "vodka"]
+    },
+    {
+      "id": "sea_breeze",
+      "name": "Sea Breeze",
+      "glass": "Highball glass",
+      "description": "Cranberry and grapefruit keep this vodka cooler tart and quenching.",
+      "ingredients": [
+        { "id": "vodka", "amount": "1 1/2 oz" },
+        { "id": "cranberry_juice", "amount": "3 oz" },
+        { "id": "grapefruit_juice", "amount": "1 1/2 oz" }
+      ],
+      "instructions": [
+        "Build in an ice-filled highball and stir.",
+        "Garnish with a lime wedge."
+      ],
+      "tags": ["fruity", "easy", "vodka"]
+    },
+    {
+      "id": "cape_codder",
+      "name": "Cape Codder",
+      "glass": "Highball glass",
+      "description": "Vodka-cranberry, done properly with a squeeze of lime.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "cranberry_juice", "amount": "4 oz" },
+        { "id": "lime_juice", "amount": "1/4 oz", "optional": true }
+      ],
+      "instructions": [
+        "Build in an ice-filled highball and stir.",
+        "Garnish with a lime wedge."
+      ],
+      "tags": ["easy", "fruity", "vodka"]
+    },
+    {
+      "id": "greyhound",
+      "name": "Greyhound",
+      "glass": "Highball glass",
+      "description": "Vodka and grapefruit — tart, dry, and dangerously drinkable.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "grapefruit_juice", "amount": "4 oz" }
+      ],
+      "instructions": [
+        "Build in an ice-filled highball and stir.",
+        "Salt the rim first and it becomes a Salty Dog."
+      ],
+      "tags": ["easy", "tart", "vodka"]
+    },
+    {
+      "id": "kamikaze",
+      "name": "Kamikaze",
+      "glass": "Coupe",
+      "description": "A vodka-lime-triple sec sour with an 80s attitude.",
+      "ingredients": [
+        { "id": "vodka", "amount": "1 1/2 oz" },
+        { "id": "triple_sec", "amount": "1 oz" },
+        { "id": "lime_juice", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Shake everything with ice.",
+        "Strain into a chilled coupe and garnish with a lime wheel."
+      ],
+      "tags": ["sour", "vodka", "retro"]
+    },
+    {
+      "id": "lemon_drop",
+      "name": "Lemon Drop",
+      "glass": "Martini glass",
+      "description": "A sugar-rimmed vodka sour that tastes like grown-up lemon candy.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "triple_sec", "amount": "1/2 oz" },
+        { "id": "lemon_juice", "amount": "1 oz" },
+        { "id": "simple_syrup", "amount": "1/2 oz" }
+      ],
+      "instructions": [
+        "Rim a chilled martini glass with sugar.",
+        "Shake everything with ice and double-strain into the glass.",
+        "Garnish with a lemon twist."
+      ],
+      "tags": ["sour", "vodka", "sweet"]
+    },
+    {
+      "id": "vodka_tonic",
+      "name": "Vodka Tonic",
+      "glass": "Highball glass",
+      "description": "Clean, cold, and quinine-crisp.",
+      "ingredients": [
+        { "id": "vodka", "amount": "2 oz" },
+        { "id": "tonic_water", "amount": "4 oz" },
+        { "id": "lime_juice", "amount": "wedge", "optional": true }
+      ],
+      "instructions": [
+        "Fill a highball with ice, add vodka, and top with tonic.",
+        "Garnish with a lime wedge."
+      ],
+      "tags": ["highball", "easy", "vodka"]
+    },
+    {
+      "id": "sidecar",
+      "name": "Sidecar",
+      "glass": "Coupe",
+      "description": "Cognac's greatest cocktail — bright, elegant, and quietly strong.",
+      "ingredients": [
+        { "id": "brandy", "amount": "2 oz" },
+        { "id": "triple_sec", "amount": "3/4 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" }
+      ],
+      "instructions": [
+        "Optionally rim half of a chilled coupe with sugar.",
+        "Shake everything with ice and double-strain into the glass.",
+        "Garnish with an orange twist."
+      ],
+      "tags": ["classic", "sour", "brandy"]
+    },
+    {
+      "id": "mimosa",
+      "name": "Mimosa",
+      "glass": "Flute",
+      "description": "Equal parts bubbles and orange juice — brunch's official beverage.",
+      "ingredients": [
+        { "id": "sparkling_wine", "amount": "3 oz" },
+        { "id": "orange_juice", "amount": "3 oz" }
+      ],
+      "instructions": [
+        "Pour chilled sparkling wine into a flute.",
+        "Top gently with cold orange juice — no stirring needed."
+      ],
+      "tags": ["brunch", "sparkling", "easy"]
+    },
+    {
+      "id": "bellini",
+      "name": "Bellini",
+      "glass": "Flute",
+      "description": "Venice's peach-and-prosecco classic, invented at Harry's Bar.",
+      "ingredients": [
+        { "id": "sparkling_wine", "amount": "4 oz" },
+        { "id": "peach", "amount": "2 oz purée" }
+      ],
+      "instructions": [
+        "Purée ripe peaches and chill.",
+        "Pour the purée into a flute and slowly top with prosecco, stirring gently."
+      ],
+      "tags": ["brunch", "sparkling", "fruity"]
+    },
+    {
+      "id": "espresso_old_fashioned",
+      "name": "Kahlúa Old Fashioned",
+      "glass": "Rocks glass",
+      "description": "An after-dinner Old Fashioned where coffee liqueur plays the sugar.",
+      "ingredients": [
+        { "id": "bourbon", "amount": "2 oz" },
+        { "id": "coffee_liqueur", "amount": "1/2 oz" },
+        { "id": "angostura_bitters", "amount": "2 dashes" }
+      ],
+      "instructions": [
+        "Stir everything with ice until well chilled.",
+        "Strain over a large cube and garnish with an orange peel."
+      ],
+      "tags": ["spirit-forward", "coffee", "whiskey"]
+    },
+    {
+      "id": "mudslide",
+      "name": "Mudslide",
+      "glass": "Rocks glass",
+      "description": "Vodka, coffee liqueur, and Irish cream — dessert with a kick.",
+      "ingredients": [
+        { "id": "vodka", "amount": "1 oz" },
+        { "id": "coffee_liqueur", "amount": "1 oz" },
+        { "id": "irish_cream", "amount": "1 oz" }
+      ],
+      "instructions": [
+        "Shake everything with ice.",
+        "Strain into a rocks glass over fresh ice (or blend with ice cream, no judgment)."
+      ],
+      "tags": ["creamy", "after-dinner", "sweet"]
+    },
+    {
+      "id": "elderflower_gin_sour",
+      "name": "Elderflower Gin Sour",
+      "glass": "Coupe",
+      "description": "A floral twist on the gin sour with St-Germain doing the sweet talking.",
+      "ingredients": [
+        { "id": "gin", "amount": "1 1/2 oz" },
+        { "id": "elderflower_liqueur", "amount": "3/4 oz" },
+        { "id": "lemon_juice", "amount": "3/4 oz" },
+        { "id": "egg_white", "amount": "1", "optional": true }
+      ],
+      "instructions": [
+        "If using egg white, shake everything without ice first.",
+        "Add ice, shake hard, and double-strain into a chilled coupe."
+      ],
+      "tags": ["floral", "sour", "gin"]
+    }
+  ]
+}

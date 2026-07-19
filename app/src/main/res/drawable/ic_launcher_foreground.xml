@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Martini glass -->
+    <path
+        android:fillColor="#FFF8EE"
+        android:pathData="M32,36 L76,36 L54,60 Z" />
+    <path
+        android:strokeColor="#FFF8EE"
+        android:strokeWidth="3"
+        android:pathData="M54,60 L54,76 M44,78 L64,78" />
+    <!-- Olive -->
+    <path
+        android:fillColor="#6B8E23"
+        android:pathData="M54,44 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+</vector>
