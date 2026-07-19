@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.tenanatc.cocktailmaker.data.CocktailData
 import com.tenanatc.cocktailmaker.data.MatchResult
 import com.tenanatc.cocktailmaker.data.Recipe
+import com.tenanatc.cocktailmaker.data.SpiritGuidance
 
 @Composable
 fun ResultsScreen(
@@ -167,7 +169,37 @@ private fun MatchCard(match: MatchResult, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.error,
                 )
             }
+            match.guidance.forEach { GuidanceRow(it) }
         }
+    }
+}
+
+/** One line of bottle-quality advice ("save the G4 for something spirit-forward"). */
+@Composable
+private fun GuidanceRow(guidance: SpiritGuidance) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Icon(
+            imageVector = if (guidance.positive) Icons.Default.Star else Icons.Default.Warning,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = if (guidance.positive) {
+                MaterialTheme.colorScheme.secondary
+            } else {
+                MaterialTheme.colorScheme.error
+            },
+        )
+        Text(
+            guidance.message,
+            style = MaterialTheme.typography.labelMedium,
+            color = if (guidance.positive) {
+                MaterialTheme.colorScheme.secondary
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
+        )
     }
 }
 
@@ -198,6 +230,23 @@ fun DetailScreen(
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary,
         )
+        if (match != null && match.guidance.isNotEmpty()) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        "Your bottles",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    match.guidance.forEach { GuidanceRow(it) }
+                }
+            }
+        }
         HorizontalDivider()
 
         Text("Ingredients", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)

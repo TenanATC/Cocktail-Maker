@@ -9,10 +9,17 @@ cocktail recipes**, complete with smart ingredient substitutions.
 
 1. **Photograph your ingredients** (or pick a photo from the gallery, or select
    ingredients by hand — no camera required).
-2. The photo is sent to **Clarifai's free image-recognition API** (the
-   `general-image-recognition` and `food-item-recognition` community models),
-   and the returned labels are mapped to canonical ingredients through an
-   alias dictionary (`"whisky"` → Bourbon, `"limes"` → Lime Juice, …).
+2. Two recognition passes run in parallel:
+   - The photo is sent to **Clarifai's free image-recognition API** (the
+     `general-image-recognition` and `food-item-recognition` community models),
+     and the returned labels are mapped to canonical ingredients through an
+     alias dictionary (`"whisky"` → Bourbon, `"limes"` → Lime Juice, …).
+   - **ML Kit OCR reads the bottle labels on-device** (free, offline, no API
+     key) and matches the text against an offline **brand catalog with quality
+     tiers** — this is what tells a G4 from a Jose Cuervo, since generic image
+     models only ever see "a tequila bottle". Brand hits also imply their
+     ingredient, so a clearly-labeled bottle is recognized even if the cloud
+     model misses it (or you're offline).
 3. You can review and edit the detected list — recognition of specific bottles
    is never perfect, so every detection is just a pre-filled suggestion.
 4. The **offline matching engine** scores every recipe in the bundled
@@ -25,8 +32,34 @@ cocktail recipes**, complete with smart ingredient substitutions.
    Results are split into **"Ready to pour"** and **"Almost there"** (missing
    at most two things), ranked by match quality.
 
-Only step 2 needs the network. Recipes, matching, substitutions, and browsing
-all work fully offline.
+Only the Clarifai half of step 2 needs the network. OCR/brand detection,
+recipes, matching, substitutions, and browsing all work fully offline.
+
+## Bottle quality — "don't mask the good stuff"
+
+Every recipe is classified by how much it exposes its base spirit:
+
+- **Showcase** — stirred and boozy (Old Fashioned, Negroni, Martini): the
+  spirit *is* the drink.
+- **Balanced** — citrus sours and highballs (Margarita, Daiquiri, G&T):
+  quality still reads.
+- **Masked** — big juice, cola, cream, or coffee (Tequila Sunrise, White
+  Russian): nobody can taste your top shelf in there.
+
+The brand catalog (`brands.json`, 100+ bottles) tiers each brand as
+**premium / mid / value**. When OCR identifies your bottles, the results get
+advice and a gentle re-ranking:
+
+- premium bottle + showcase drink → *"A perfect stage for your G4."* (boosted)
+- premium bottle + masked drink → *"Big mixers will bury your G4 — pour the
+  Jose Cuervo here instead."* (demoted; names your value bottle if one was
+  in the photo)
+- value bottle + showcase drink → *"This drink puts the tequila front and
+  center — Jose Cuervo Especial will show its edges."*
+- value bottle + masked drink → *"A great spot for the Jose Cuervo."*
+
+The nudge only reorders suggestions — availability scores never change, and
+mid-tier bottles are left in peace.
 
 ## Getting a (free) API key
 
@@ -61,13 +94,14 @@ app/src/main/assets/
   ingredients.json   # canonical ingredients, vision-label aliases, pantry
                      # staples, and substitution rules with tasting notes
   cocktails.json     # the offline recipe book (60+ drinks)
+  brands.json        # bottle brands with quality tiers and OCR keywords
 app/src/main/java/com/tenanatc/cocktailmaker/
-  data/              # models, JSON parsing, and the RecipeMatcher engine
-  vision/            # Clarifai client, image scaling/encoding, label→ingredient mapper
+  data/              # models, JSON parsing, RecipeMatcher engine, BrandDetector
+  vision/            # Clarifai client, ML Kit OCR, image utils, label→ingredient mapper
   ui/                # Jetpack Compose screens (home, ingredients, results, detail, browse)
   AppViewModel.kt    # app state + navigation back-stack
   MainActivity.kt    # single-activity Compose host, camera/gallery launchers
-app/src/test/        # JVM unit tests: dictionary integrity, matcher, label mapping
+app/src/test/        # JVM unit tests: dictionary integrity, matcher, brands, label mapping
 ```
 
 ## Extending the recipe book

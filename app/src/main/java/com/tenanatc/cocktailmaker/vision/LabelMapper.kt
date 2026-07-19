@@ -28,6 +28,23 @@ class LabelMapper(data: CocktailData) {
         return matched.values.toList()
     }
 
+    /**
+     * Scans free-form OCR text (a bottle label, e.g. "TEQUILA BLANCO 100% DE
+     * AGAVE") for ingredient names and aliases, checking every 1–3 word window.
+     */
+    fun mapText(text: String): List<Ingredient> {
+        val tokens = normalize(text).split(' ').filter { it.isNotEmpty() }
+        val matched = LinkedHashMap<String, Ingredient>()
+        for (i in tokens.indices) {
+            for (n in 3 downTo 1) {
+                if (i + n > tokens.size) continue
+                val phrase = tokens.subList(i, i + n).joinToString(" ")
+                lookup(phrase)?.let { matched.putIfAbsent(it.id, it) }
+            }
+        }
+        return matched.values.toList()
+    }
+
     private fun lookup(rawLabel: String): Ingredient? {
         val label = normalize(rawLabel)
         aliasIndex[label]?.let { return it }
@@ -42,6 +59,12 @@ class LabelMapper(data: CocktailData) {
         return null
     }
 
+    // Accent-stripped, lowercased, punctuation collapsed to spaces, so that
+    // "Curaçao", "curacao", and "CURAÇAO\n" all index identically.
     private fun normalize(s: String): String =
-        s.trim().lowercase().replace(Regex("\\s+"), " ")
+        java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{Mn}+"), "")
+            .lowercase()
+            .replace(Regex("[^a-z0-9]+"), " ")
+            .trim()
 }

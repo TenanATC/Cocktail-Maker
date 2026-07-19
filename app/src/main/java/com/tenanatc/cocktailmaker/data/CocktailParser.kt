@@ -8,7 +8,11 @@ import org.json.JSONObject
  */
 object CocktailParser {
 
-    fun parse(ingredientsJson: String, cocktailsJson: String): CocktailData {
+    fun parse(
+        ingredientsJson: String,
+        cocktailsJson: String,
+        brandsJson: String? = null,
+    ): CocktailData {
         val ingRoot = JSONObject(ingredientsJson)
 
         val ingredients = buildList {
@@ -75,7 +79,9 @@ object CocktailParser {
             }
         }
 
-        return CocktailData(ingredients, recipes, substitutions, pantry)
+        val brands = brandsJson?.let { BrandParser.parse(it) } ?: emptyList()
+
+        return CocktailData(ingredients, recipes, substitutions, pantry, brands)
     }
 
     private fun org.json.JSONArray?.toStringList(): List<String> {

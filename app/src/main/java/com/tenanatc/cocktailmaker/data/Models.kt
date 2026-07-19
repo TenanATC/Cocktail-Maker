@@ -45,6 +45,36 @@ data class AppliedSubstitution(
     val note: String,
 )
 
+/**
+ * How much a recipe lets the base spirit shine.
+ * SHOWCASE: stirred/boozy, the spirit is the drink (Old Fashioned, Martini).
+ * BALANCED: citrus sours and other drinks where quality still reads (Daiquiri).
+ * MASKED: big juices, cola, cream, or coffee dominate (Tequila Sunrise).
+ */
+enum class RecipeStyle { SHOWCASE, BALANCED, MASKED }
+
+enum class GuidanceType {
+    /** A premium bottle in a spirit-forward drink — exactly where it belongs. */
+    PREMIUM_SHOWCASED,
+    /** A premium bottle about to drown in mixers. */
+    PREMIUM_WASTED,
+    /** A value bottle with nowhere to hide. */
+    VALUE_EXPOSED,
+    /** A value bottle doing honest work under big mixers. */
+    VALUE_WELL_PLACED,
+}
+
+/** Bottle-quality advice for one spirit used by a matched recipe. */
+data class SpiritGuidance(
+    val ingredient: Ingredient,
+    val brand: Brand,
+    val type: GuidanceType,
+    val message: String,
+) {
+    val positive: Boolean
+        get() = type == GuidanceType.PREMIUM_SHOWCASED || type == GuidanceType.VALUE_WELL_PLACED
+}
+
 /** How well a recipe matches the ingredients on hand. */
 data class MatchResult(
     val recipe: Recipe,
@@ -54,6 +84,9 @@ data class MatchResult(
     val directHits: List<Ingredient>,
     val substitutions: List<AppliedSubstitution>,
     val missing: List<Ingredient>,
+    val style: RecipeStyle = RecipeStyle.BALANCED,
+    /** Bottle-quality advice based on the brands read off the labels. */
+    val guidance: List<SpiritGuidance> = emptyList(),
 ) {
     val makeableNow: Boolean get() = missing.isEmpty()
 }
@@ -65,6 +98,8 @@ data class CocktailData(
     val substitutions: List<Substitution>,
     /** Ingredient ids assumed to always be on hand (water, ice, salt...). */
     val pantry: Set<String>,
+    /** Known bottle brands with quality tiers, recognized from label text. */
+    val brands: List<Brand> = emptyList(),
 ) {
     val ingredientsById: Map<String, Ingredient> = ingredients.associateBy { it.id }
 }

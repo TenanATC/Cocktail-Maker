@@ -19,10 +19,12 @@ object CocktailRepository {
     }
 
     private fun load(context: Context): CocktailData {
-        val ingredientsJson = context.assets.open("ingredients.json")
-            .bufferedReader().use { it.readText() }
-        val cocktailsJson = context.assets.open("cocktails.json")
-            .bufferedReader().use { it.readText() }
-        return CocktailParser.parse(ingredientsJson, cocktailsJson)
+        fun asset(name: String) =
+            context.assets.open(name).bufferedReader().use { it.readText() }
+        return CocktailParser.parse(
+            asset("ingredients.json"),
+            asset("cocktails.json"),
+            asset("brands.json"),
+        )
     }
 }

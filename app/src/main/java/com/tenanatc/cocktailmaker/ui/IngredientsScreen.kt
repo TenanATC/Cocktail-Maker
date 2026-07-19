@@ -115,10 +115,21 @@ fun IngredientsScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 vm.selectedIngredients.forEach { ingredient ->
+                    val bottles = vm.brandsFor(ingredient.id)
+                    val label = when {
+                        bottles.isEmpty() -> ingredient.name
+                        else -> "${ingredient.name} · " + bottles.joinToString { bottle ->
+                            if (bottle.tier == com.tenanatc.cocktailmaker.data.BrandTier.PREMIUM) {
+                                "${bottle.name} ★"
+                            } else {
+                                bottle.name
+                            }
+                        }
+                    }
                     InputChip(
                         selected = true,
                         onClick = { vm.removeIngredient(ingredient) },
-                        label = { Text(ingredient.name) },
+                        label = { Text(label) },
                         trailingIcon = {
                             Icon(
                                 Icons.Default.Close,

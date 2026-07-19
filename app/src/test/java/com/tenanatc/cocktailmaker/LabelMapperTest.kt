@@ -48,6 +48,21 @@ class LabelMapperTest {
     }
 
     @Test
+    fun `scans free-form OCR label text for ingredient words`() {
+        val ids = mapper.mapText(
+            """
+            TEQUILA
+            BLANCO
+            100% DE AGAVE
+            LONDON DRY GIN
+            """.trimIndent()
+        ).map { it.id }
+        assertTrue("expected tequila in $ids", "tequila" in ids)
+        assertTrue("expected gin in $ids", "gin" in ids)
+        // "agave" maps to agave syrup via alias — acceptable, the list is user-editable.
+    }
+
+    @Test
     fun `deduplicates labels mapping to the same ingredient`() {
         val ingredients = mapper.map(
             listOf(

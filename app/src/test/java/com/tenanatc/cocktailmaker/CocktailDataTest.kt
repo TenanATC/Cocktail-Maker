@@ -14,6 +14,7 @@ object TestData {
         CocktailParser.parse(
             File(assets, "ingredients.json").readText(),
             File(assets, "cocktails.json").readText(),
+            File(assets, "brands.json").readText(),
         )
     }
 }
@@ -75,6 +76,20 @@ class CocktailDataTest {
             val required = recipe.ingredients.filter { !it.optional && it.ingredientId !in data.pantry }
             assertTrue("${recipe.id} has no required ingredients", required.isNotEmpty())
             assertTrue("${recipe.id} has no instructions", recipe.instructions.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun `brand catalog is well-formed`() {
+        assertTrue("expected a real brand catalog", data.brands.size >= 60)
+        val ids = data.brands.map { it.id }
+        assertEquals(ids.size, ids.toSet().size)
+        for (brand in data.brands) {
+            assertTrue(
+                "brand '${brand.id}' references unknown ingredient '${brand.ingredientId}'",
+                brand.ingredientId in data.ingredientsById,
+            )
+            assertTrue("brand '${brand.id}' has no keywords", brand.keywords.isNotEmpty())
         }
     }
 
