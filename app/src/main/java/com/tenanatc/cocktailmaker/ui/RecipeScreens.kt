@@ -38,17 +38,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.tenanatc.cocktailmaker.data.CocktailData
+import com.tenanatc.cocktailmaker.data.Ingredient
 import com.tenanatc.cocktailmaker.data.MatchResult
 import com.tenanatc.cocktailmaker.data.Recipe
 import com.tenanatc.cocktailmaker.data.SpiritGuidance
+import com.tenanatc.cocktailmaker.data.UnlockSuggestion
 
 @Composable
 fun ResultsScreen(
     modifier: Modifier = Modifier,
     results: List<MatchResult>,
+    riffs: List<Recipe>,
+    unlocks: List<UnlockSuggestion>,
     onOpen: (MatchResult) -> Unit,
+    onOpenRiff: (Recipe) -> Unit,
+    onAddUnlock: (Ingredient) -> Unit,
 ) {
-    if (results.isEmpty()) {
+    if (results.isEmpty() && riffs.isEmpty() && unlocks.isEmpty()) {
         Column(
             modifier = modifier.fillMaxSize().padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,6 +95,83 @@ fun ResultsScreen(
             items(almost, key = { it.recipe.id }) { match ->
                 MatchCard(match, onClick = { onOpen(match) })
             }
+        }
+        if (riffs.isNotEmpty()) {
+            item { SectionHeader("Off-menu riffs (${riffs.size})") }
+            item {
+                Text(
+                    "Not in any book — invented from your shelf using classic formulas.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            items(riffs, key = { it.id }) { riff ->
+                RiffCard(riff, onClick = { onOpenRiff(riff) })
+            }
+        }
+        if (unlocks.isNotEmpty()) {
+            item { SectionHeader("One bottle away") }
+            items(unlocks, key = { it.ingredient.id }) { unlock ->
+                UnlockRow(unlock, onAdd = { onAddUnlock(unlock.ingredient) })
+            }
+        }
+    }
+}
+
+@Composable
+private fun RiffCard(riff: Recipe, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    riff.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    "RIFF",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            Text(
+                riff.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun UnlockRow(unlock: UnlockSuggestion, onAdd: () -> Unit) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    unlock.ingredient.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    "Unlocks ${unlock.unlocked.size}: " +
+                        unlock.unlocked.take(3).joinToString { it.name } +
+                        if (unlock.unlocked.size > 3) " +${unlock.unlocked.size - 3} more" else "",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            androidx.compose.material3.TextButton(onClick = onAdd) { Text("Have it") }
         }
     }
 }

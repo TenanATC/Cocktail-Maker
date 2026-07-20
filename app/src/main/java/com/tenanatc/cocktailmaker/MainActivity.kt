@@ -151,7 +151,11 @@ fun CocktailMakerApp(vm: AppViewModel = viewModel()) {
             Screen.Results -> ResultsScreen(
                 modifier = modifier,
                 results = vm.results,
+                riffs = vm.riffs,
+                unlocks = vm.unlocks,
                 onOpen = { vm.navigate(Screen.Detail(it.recipe, it)) },
+                onOpenRiff = { vm.navigate(Screen.Detail(it)) },
+                onAddUnlock = { vm.addUnlockedIngredient(it) },
             )
 
             is Screen.Detail -> DetailScreen(

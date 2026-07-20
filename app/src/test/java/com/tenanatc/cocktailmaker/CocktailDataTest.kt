@@ -80,6 +80,18 @@ class CocktailDataTest {
     }
 
     @Test
+    fun `ingredient families have at least two members`() {
+        val families = data.ingredients.filter { it.family != null }.groupBy { it.family!! }
+        assertTrue("expected some families", families.isNotEmpty())
+        for ((family, members) in families) {
+            assertTrue(
+                "family '$family' has only ${members.size} member(s) — fallbacks need at least 2",
+                members.size >= 2,
+            )
+        }
+    }
+
+    @Test
     fun `brand catalog is well-formed`() {
         assertTrue("expected a real brand catalog", data.brands.size >= 60)
         val ids = data.brands.map { it.id }

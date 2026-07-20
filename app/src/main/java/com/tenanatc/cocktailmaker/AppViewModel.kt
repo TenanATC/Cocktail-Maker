@@ -14,9 +14,12 @@ import com.tenanatc.cocktailmaker.data.BrandDetector
 import com.tenanatc.cocktailmaker.data.CocktailData
 import com.tenanatc.cocktailmaker.data.CocktailRepository
 import com.tenanatc.cocktailmaker.data.Ingredient
+import com.tenanatc.cocktailmaker.data.MatchMode
 import com.tenanatc.cocktailmaker.data.MatchResult
 import com.tenanatc.cocktailmaker.data.Recipe
 import com.tenanatc.cocktailmaker.data.RecipeMatcher
+import com.tenanatc.cocktailmaker.data.RiffGenerator
+import com.tenanatc.cocktailmaker.data.UnlockSuggestion
 import com.tenanatc.cocktailmaker.vision.ClarifaiClient
 import com.tenanatc.cocktailmaker.vision.ImageUtils
 import com.tenanatc.cocktailmaker.vision.LabelMapper
@@ -44,6 +47,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val matcher = RecipeMatcher(data)
     private val labelMapper = LabelMapper(data)
     private val brandDetector = BrandDetector(data.brands)
+    private val riffGenerator = RiffGenerator(data)
 
     var screenStack by mutableStateOf<List<Screen>>(listOf(Screen.Home))
         private set
@@ -65,6 +69,20 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         private set
 
     var results by mutableStateOf<List<MatchResult>>(emptyList())
+        private set
+
+    /** Off-menu drinks invented from the shelf via classic formulas. */
+    var riffs by mutableStateOf<List<Recipe>>(emptyList())
+        private set
+
+    /** "One bottle away" shopping suggestions. */
+    var unlocks by mutableStateOf<List<UnlockSuggestion>>(emptyList())
+        private set
+
+    var matchMode by mutableStateOf(
+        runCatching { MatchMode.valueOf(prefs.getString("match_mode", null) ?: "") }
+            .getOrDefault(MatchMode.STRICT)
+    )
         private set
 
     var apiKey by mutableStateOf(
@@ -93,6 +111,13 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun saveApiKey(key: String) {
         apiKey = key.trim()
         prefs.edit().putString("clarifai_pat", apiKey).apply()
+    }
+
+    fun setMatchMode(mode: MatchMode) {
+        matchMode = mode
+        prefs.edit().putString("match_mode", mode.name).apply()
+        // Keep already-computed results consistent with the new mode.
+        if (results.isNotEmpty() || riffs.isNotEmpty() || unlocks.isNotEmpty()) recompute()
     }
 
     // ----- Ingredient detection flow -----
@@ -192,16 +217,28 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         selectedIngredients = emptyList()
         detectedBrands = emptyMap()
         results = emptyList()
+        riffs = emptyList()
+        unlocks = emptyList()
         detectionError = null
     }
 
     // ----- Matching -----
 
+    private fun recompute() {
+        val availableIds = selectedIngredients.map { it.id }.toSet()
+        results = matcher.match(availableIds, detectedBrands, matchMode)
+        riffs = riffGenerator.generate(availableIds, detectedBrands)
+        unlocks = matcher.unlockSuggestions(availableIds, matchMode)
+    }
+
     fun findCocktails() {
-        results = matcher.match(
-            availableIds = selectedIngredients.map { it.id }.toSet(),
-            brandsByIngredient = detectedBrands,
-        )
+        recompute()
         navigate(Screen.Results)
+    }
+
+    /** From the "one bottle away" list: claim the bottle and refresh in place. */
+    fun addUnlockedIngredient(ingredient: Ingredient) {
+        addIngredient(ingredient)
+        recompute()
     }
 }

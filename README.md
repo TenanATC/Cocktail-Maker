@@ -61,6 +61,31 @@ advice and a gentle re-ranking:
 The nudge only reorders suggestions — availability scores never change, and
 mid-tier bottles are left in peace.
 
+## Matching styles, riffs, and the shopping list
+
+**Matching style** (chosen on the ingredients screen, remembered between runs):
+
+- **Strict** — curated substitutions only, by the book.
+- **Flexible** — adds same-family fallbacks at a lower match weight: any
+  whiskey can stand in for any other whiskey (likewise rum, agave, citrus,
+  syrup, and bitters families), clearly labeled as a bigger flavor gamble.
+- **Adventurous** — family fallbacks plus looser gates (up to 3 missing
+  ingredients, one-third coverage), for when you want ideas rather than rules.
+
+**Off-menu riffs**: when your shelf fits a time-tested formula but no recipe
+in the book uses exactly those bottles, the app invents one — sour
+(2 : ¾ : ¾), highball, old-fashioned (spirit/sugar/bitters), and spritz
+(2 : 3 : 1) templates. Riffs are clearly labeled, ranked below real recipes,
+never duplicate the book (or a classic you can already make), respect a
+pairing veto list (no gin & cola), refuse unaged spirits in the
+old-fashioned template, and showcase your premium bottle when one was
+recognized.
+
+**One bottle away**: pure shopping-list math — for every ingredient you don't
+have, the app counts which recipes it would unlock right now and suggests the
+highest-impact bottles ("Sweet Vermouth — unlocks Manhattan, Negroni…"), with
+a one-tap "Have it" to add it and refresh.
+
 ## Getting a (free) API key
 
 Ingredient recognition uses Clarifai's community tier, which is free

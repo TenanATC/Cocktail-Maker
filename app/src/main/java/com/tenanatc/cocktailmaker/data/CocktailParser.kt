@@ -25,6 +25,7 @@ object CocktailParser {
                         name = o.getString("name"),
                         category = o.getString("category"),
                         aliases = o.optJSONArray("aliases").toStringList(),
+                        family = if (o.has("family")) o.getString("family") else null,
                     )
                 )
             }

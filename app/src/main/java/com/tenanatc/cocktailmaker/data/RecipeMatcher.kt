@@ -14,6 +14,13 @@ class RecipeMatcher(private val data: CocktailData) {
     /** Weight applied to an ingredient covered via substitution rather than directly. */
     private val substitutionWeight = 0.75
 
+    /** Weight for a same-family stand-in — a bigger flavor gamble than a curated swap. */
+    private val familyFallbackWeight = 0.55
+
+    /** family name -> its member ingredients. */
+    private val familyMembers: Map<String, List<Ingredient>> =
+        data.ingredients.filter { it.family != null }.groupBy { it.family!! }
+
     /** Required ingredients that dominate a drink and hide the base spirit. */
     private val maskingIds = setOf(
         "cola", "orange_juice", "pineapple_juice", "cranberry_juice", "tomato_juice",
@@ -31,18 +38,17 @@ class RecipeMatcher(private val data: CocktailData) {
      *   or hand-picked by the user).
      * @param brandsByIngredient bottle brands read off the labels, keyed by the
      *   ingredient they fill; used for quality guidance, never for availability.
-     * @param maxMissing recipes missing more than this many required ingredients
-     *   are dropped entirely.
+     * @param mode how far the matcher may stray from the letter of the recipe.
      */
     fun match(
         availableIds: Set<String>,
         brandsByIngredient: Map<String, List<Brand>> = emptyMap(),
-        maxMissing: Int = 2,
+        mode: MatchMode = MatchMode.STRICT,
     ): List<MatchResult> {
         if (availableIds.isEmpty()) return emptyList()
 
         return data.recipes.mapNotNull { recipe ->
-            scoreRecipe(recipe, availableIds, brandsByIngredient, maxMissing)
+            scoreRecipe(recipe, availableIds, brandsByIngredient, mode)
         }.sortedWith(
             compareByDescending<MatchResult> { it.makeableNow }
                 .thenByDescending { it.score + guidanceAdjust(it) }
@@ -71,7 +77,7 @@ class RecipeMatcher(private val data: CocktailData) {
         recipe: Recipe,
         availableIds: Set<String>,
         brandsByIngredient: Map<String, List<Brand>>,
-        maxMissing: Int,
+        mode: MatchMode,
     ): MatchResult? {
         val required = recipe.ingredients.filter {
             !it.optional && it.ingredientId !in data.pantry
@@ -93,15 +99,23 @@ class RecipeMatcher(private val data: CocktailData) {
                 else -> {
                     val sub = subsByMissing[line.ingredientId]
                         ?.firstOrNull { it.useInsteadId in availableIds }
-                    if (sub != null) {
-                        applied += AppliedSubstitution(
-                            wanted = wanted,
-                            useInstead = data.ingredientsById.getValue(sub.useInsteadId),
-                            note = sub.note,
-                        )
-                        points += substitutionWeight
-                    } else {
-                        missing += wanted
+                    val fallback = if (sub == null && mode != MatchMode.STRICT) {
+                        familyFallbackFor(wanted, availableIds)
+                    } else null
+                    when {
+                        sub != null -> {
+                            applied += AppliedSubstitution(
+                                wanted = wanted,
+                                useInstead = data.ingredientsById.getValue(sub.useInsteadId),
+                                note = sub.note,
+                            )
+                            points += substitutionWeight
+                        }
+                        fallback != null -> {
+                            applied += fallback
+                            points += familyFallbackWeight
+                        }
+                        else -> missing += wanted
                     }
                 }
             }
@@ -109,9 +123,15 @@ class RecipeMatcher(private val data: CocktailData) {
 
         // Not interesting unless at least one real ingredient from the photo is used.
         if (directHits.isEmpty() && applied.isEmpty()) return null
+        val maxMissing = if (mode == MatchMode.ADVENTUROUS) 3 else 2
         if (missing.size > maxMissing) return null
         // A recipe where most ingredients are absent is noise, even under maxMissing.
-        if ((directHits.size + applied.size) * 2 < required.size) return null
+        val covered = directHits.size + applied.size
+        val coverageOk = when (mode) {
+            MatchMode.ADVENTUROUS -> covered * 3 >= required.size
+            else -> covered * 2 >= required.size
+        }
+        if (!coverageOk) return null
 
         val style = styleOf(recipe)
         return MatchResult(
@@ -124,6 +144,59 @@ class RecipeMatcher(private val data: CocktailData) {
             style = style,
             guidance = buildGuidance(style, directHits, applied, brandsByIngredient),
         )
+    }
+
+    /**
+     * Last-resort stand-in from the same family (any whiskey for any whiskey…),
+     * used only in FLEXIBLE/ADVENTUROUS modes when no curated rule applies.
+     */
+    private fun familyFallbackFor(
+        wanted: Ingredient,
+        availableIds: Set<String>,
+    ): AppliedSubstitution? {
+        val family = wanted.family ?: return null
+        val stand = familyMembers[family]
+            ?.firstOrNull { it.id != wanted.id && it.id in availableIds }
+            ?: return null
+        return AppliedSubstitution(
+            wanted = wanted,
+            useInstead = stand,
+            note = "Same $family family — expect a noticeably different character.",
+            familyFallback = true,
+        )
+    }
+
+    /**
+     * "One bottle away": for each ingredient not on hand, which recipes would
+     * become makeable right now if it were added? Sorted by how many drinks the
+     * bottle unlocks. Pure shopping-list math — no guessing involved.
+     */
+    fun unlockSuggestions(
+        availableIds: Set<String>,
+        mode: MatchMode = MatchMode.STRICT,
+        max: Int = 5,
+    ): List<UnlockSuggestion> {
+        if (availableIds.isEmpty()) return emptyList()
+        val alreadyMakeable = match(availableIds, mode = mode)
+            .filter { it.makeableNow }
+            .map { it.recipe.id }
+            .toSet()
+
+        return data.ingredients.asSequence()
+            .filter { it.id !in availableIds && it.id !in data.pantry }
+            .map { candidate ->
+                val newlyMakeable = match(availableIds + candidate.id, mode = mode)
+                    .filter { it.makeableNow && it.recipe.id !in alreadyMakeable }
+                    .map { it.recipe }
+                UnlockSuggestion(candidate, newlyMakeable)
+            }
+            .filter { it.unlocked.isNotEmpty() }
+            .sortedWith(
+                compareByDescending<UnlockSuggestion> { it.unlocked.size }
+                    .thenBy { it.ingredient.name }
+            )
+            .take(max)
+            .toList()
     }
 
     /** Classifies how much a recipe exposes its base spirit. */

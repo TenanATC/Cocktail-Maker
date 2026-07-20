@@ -5,12 +5,16 @@ package com.tenanatc.cocktailmaker.data
  *
  * @param aliases lowercase names the vision API (or a user search) might use for
  *   this ingredient, e.g. "cointreau" for triple sec.
+ * @param family interchangeability group ("whiskey", "rum", "agave", "citrus",
+ *   "syrup", "bitters"); members can stand in for each other as a last resort
+ *   in the more relaxed matching modes. Null means no family.
  */
 data class Ingredient(
     val id: String,
     val name: String,
     val category: String,
     val aliases: List<String> = emptyList(),
+    val family: String? = null,
 )
 
 /** One line of a recipe: an ingredient reference plus a human-readable amount. */
@@ -43,6 +47,22 @@ data class AppliedSubstitution(
     val wanted: Ingredient,
     val useInstead: Ingredient,
     val note: String,
+    /** True when this came from a same-family fallback rather than a curated rule. */
+    val familyFallback: Boolean = false,
+)
+
+/**
+ * How adventurous the matcher is allowed to be.
+ * STRICT: curated substitutions only, at most 2 missing ingredients.
+ * FLEXIBLE: adds same-family fallbacks (any whiskey for any whiskey...).
+ * ADVENTUROUS: family fallbacks plus looser coverage gates (up to 3 missing).
+ */
+enum class MatchMode { STRICT, FLEXIBLE, ADVENTUROUS }
+
+/** "Buying [ingredient] would let you make [unlocked] right now." */
+data class UnlockSuggestion(
+    val ingredient: Ingredient,
+    val unlocked: List<Recipe>,
 )
 
 /**

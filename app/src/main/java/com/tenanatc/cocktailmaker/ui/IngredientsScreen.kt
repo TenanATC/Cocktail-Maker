@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tenanatc.cocktailmaker.AppViewModel
+import com.tenanatc.cocktailmaker.data.MatchMode
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -140,6 +141,36 @@ fun IngredientsScreen(
                     )
                 }
             }
+        }
+
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                "Matching style",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                MatchMode.entries.forEach { mode ->
+                    FilterChip(
+                        selected = vm.matchMode == mode,
+                        onClick = { vm.setMatchMode(mode) },
+                        label = {
+                            Text(
+                                mode.name.lowercase().replaceFirstChar { it.uppercase() }
+                            )
+                        },
+                    )
+                }
+            }
+            Text(
+                when (vm.matchMode) {
+                    MatchMode.STRICT -> "Curated substitutions only — by the book."
+                    MatchMode.FLEXIBLE -> "Adds same-family swaps (any whiskey for any whiskey)."
+                    MatchMode.ADVENTUROUS -> "Family swaps plus looser matches — expect surprises."
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
