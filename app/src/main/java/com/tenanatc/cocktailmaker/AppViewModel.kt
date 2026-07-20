@@ -113,7 +113,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putString("clarifai_pat", apiKey).apply()
     }
 
-    fun setMatchMode(mode: MatchMode) {
+    fun updateMatchMode(mode: MatchMode) {
         matchMode = mode
         prefs.edit().putString("match_mode", mode.name).apply()
         // Keep already-computed results consistent with the new mode.

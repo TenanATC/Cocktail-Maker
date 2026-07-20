@@ -153,7 +153,7 @@ fun IngredientsScreen(
                 MatchMode.entries.forEach { mode ->
                     FilterChip(
                         selected = vm.matchMode == mode,
-                        onClick = { vm.setMatchMode(mode) },
+                        onClick = { vm.updateMatchMode(mode) },
                         label = {
                             Text(
                                 mode.name.lowercase().replaceFirstChar { it.uppercase() }
