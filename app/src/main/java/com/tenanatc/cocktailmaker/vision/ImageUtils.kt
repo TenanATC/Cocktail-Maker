@@ -20,17 +20,34 @@ object ImageUtils {
     fun loadScaledBitmap(context: Context, uri: Uri): Bitmap? {
         val resolver = context.contentResolver
 
+        // First pass: read only the dimensions. Note decodeStream ALWAYS returns
+        // null under inJustDecodeBounds, so we must not treat that null as failure
+        // here — only a missing stream or an exception counts as unreadable.
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
-            ?: return null
+        try {
+            resolver.openInputStream(uri).use { stream ->
+                if (stream == null) return null
+                BitmapFactory.decodeStream(stream, null, bounds)
+            }
+        } catch (_: Exception) {
+            return null
+        }
         if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
 
         var sample = 1
         while (max(bounds.outWidth, bounds.outHeight) / (sample * 2) >= MAX_DIMENSION) {
             sample *= 2
         }
+
+        // Second pass: actually decode the downscaled bitmap.
         val opts = BitmapFactory.Options().apply { inSampleSize = sample }
-        return resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) }
+        return try {
+            resolver.openInputStream(uri).use { stream ->
+                if (stream == null) null else BitmapFactory.decodeStream(stream, null, opts)
+            }
+        } catch (_: Exception) {
+            null
+        }
     }
 
     /** JPEG-compresses [bitmap] and returns it Base64-encoded (no line wraps). */
