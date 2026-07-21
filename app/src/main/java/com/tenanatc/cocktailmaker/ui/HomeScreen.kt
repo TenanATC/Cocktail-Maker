@@ -110,8 +110,8 @@ fun HomeScreen(
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
-                        "Ingredient detection uses Clarifai's free tier. Create a free account " +
-                            "at clarifai.com, copy a Personal Access Token, and paste it in " +
+                        "Ingredient detection uses Google's Gemini vision model. Get a free " +
+                            "key at aistudio.google.com (\"Get API key\") and paste it in " +
                             "Settings. Everything else — recipes, matching, substitutions — " +
                             "works fully offline.",
                         style = MaterialTheme.typography.bodySmall,

@@ -136,7 +136,7 @@ fun CocktailMakerApp(vm: AppViewModel = viewModel()) {
         when (val screen = vm.currentScreen) {
             Screen.Home -> HomeScreen(
                 modifier = modifier,
-                hasApiKey = vm.apiKey.isNotBlank(),
+                hasApiKey = vm.hasRecognitionKey,
                 onTakePhoto = {
                     vm.clearSession()
                     launchCamera()
@@ -188,8 +188,10 @@ fun CocktailMakerApp(vm: AppViewModel = viewModel()) {
 
     if (showSettings) {
         SettingsDialog(
-            currentKey = vm.apiKey,
-            onSave = { vm.saveApiKey(it) },
+            currentGeminiKey = vm.geminiKey,
+            currentClarifaiKey = vm.apiKey,
+            onSaveGemini = { vm.saveGeminiKey(it) },
+            onSaveClarifai = { vm.saveApiKey(it) },
             onDismiss = { showSettings = false },
         )
     }

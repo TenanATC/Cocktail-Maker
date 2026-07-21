@@ -18,15 +18,21 @@ import com.tenanatc.cocktailmaker.data.MatchMode
 import com.tenanatc.cocktailmaker.data.MatchResult
 import com.tenanatc.cocktailmaker.data.Recipe
 import com.tenanatc.cocktailmaker.data.RecipeMatcher
+import com.tenanatc.cocktailmaker.data.BrandTier
 import com.tenanatc.cocktailmaker.data.RiffGenerator
 import com.tenanatc.cocktailmaker.data.UnlockSuggestion
 import com.tenanatc.cocktailmaker.vision.ClarifaiClient
+import com.tenanatc.cocktailmaker.vision.GeminiClient
+import com.tenanatc.cocktailmaker.vision.GeminiItem
+import com.tenanatc.cocktailmaker.vision.GeminiResult
 import com.tenanatc.cocktailmaker.vision.ImageUtils
 import com.tenanatc.cocktailmaker.vision.LabelMapper
 import com.tenanatc.cocktailmaker.vision.OcrReader
 import com.tenanatc.cocktailmaker.vision.VisionResult
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -90,6 +96,13 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     )
         private set
 
+    /** Primary recognizer key (Google AI Studio / Gemini). */
+    var geminiKey by mutableStateOf(prefs.getString("gemini_key", null).orEmpty())
+        private set
+
+    /** True once photo recognition can run (Gemini preferred, Clarifai legacy). */
+    val hasRecognitionKey: Boolean get() = geminiKey.isNotBlank() || apiKey.isNotBlank()
+
     // ----- Navigation -----
 
     fun navigate(screen: Screen) {
@@ -111,6 +124,11 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun saveApiKey(key: String) {
         apiKey = key.trim()
         prefs.edit().putString("clarifai_pat", apiKey).apply()
+    }
+
+    fun saveGeminiKey(key: String) {
+        geminiKey = key.trim()
+        prefs.edit().putString("gemini_key", geminiKey).apply()
     }
 
     fun updateMatchMode(mode: MatchMode) {
@@ -138,56 +156,117 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             }
             photo = bitmap
 
-            // Run cloud concept recognition and on-device label OCR in parallel.
-            // OCR is what identifies brands (and their quality tier) — generic
-            // vision models only see "a tequila bottle".
-            val conceptsJob = async {
-                val base64 = withContext(Dispatchers.Default) { ImageUtils.toBase64Jpeg(bitmap) }
-                ClarifaiClient(apiKey).recognize(base64)
-            }
-            val ocrJob = async { OcrReader.readText(bitmap) }
-
-            val ocrText = ocrJob.await().orEmpty()
-            val brands = brandDetector.detect(ocrText)
-            if (brands.isNotEmpty()) {
-                val merged = detectedBrands.toMutableMap()
-                for (brand in brands) {
-                    val existing = merged[brand.ingredientId].orEmpty()
-                    if (existing.none { it.id == brand.id }) {
-                        merged[brand.ingredientId] = existing + brand
-                    }
-                }
-                detectedBrands = merged
-            }
-
-            // Ingredients come from three signals: brand hits ("Espolòn" implies
-            // tequila), plain words OCR'd off labels ("LONDON DRY GIN"), and the
-            // image-recognition concepts.
-            val fromBrands = brands.mapNotNull { data.ingredientsById[it.ingredientId] }
-            val fromOcrWords = labelMapper.mapText(ocrText)
-
-            var apiError: String? = null
-            val fromConcepts = when (val result = conceptsJob.await()) {
-                is VisionResult.Success -> labelMapper.map(result.labels)
-                is VisionResult.Error -> {
-                    apiError = result.message
-                    emptyList()
-                }
-            }
-
-            val detected = (fromBrands + fromOcrWords + fromConcepts).distinctBy { it.id }
-            selectedIngredients = (selectedIngredients + detected).distinctBy { it.id }
-
-            detectionError = when {
-                detected.isEmpty() && apiError != null -> apiError
-                detected.isEmpty() ->
-                    "No cocktail ingredients recognized in the photo — add them by hand below."
-                // OCR salvaged something even though the cloud call failed; tell
-                // the user quietly rather than failing the whole scan.
-                apiError != null -> "Label text was read offline, but full image recognition failed: $apiError"
-                else -> null
+            // Gemini is the primary recognizer — it reads stylized labels and
+            // reasons about what a bottle actually is. Fall back to the on-device
+            // OCR/Clarifai pipeline only when no Gemini key is set.
+            if (geminiKey.isNotBlank()) {
+                recognizeWithGemini(bitmap)
+            } else {
+                recognizeWithOcrAndClarifai(bitmap)
             }
             detecting = false
+        }
+    }
+
+    private suspend fun recognizeWithGemini(bitmap: Bitmap) {
+        val base64 = withContext(Dispatchers.Default) { ImageUtils.toBase64Jpeg(bitmap) }
+        val catalog = data.ingredients.map { it.id to it.name }
+        when (val result = GeminiClient(geminiKey).recognize(base64, catalog)) {
+            is GeminiResult.Success -> {
+                val recognized = result.items.mapNotNull { data.ingredientsById[it.ingredientId] }
+                    .distinctBy { it.id }
+                selectedIngredients = (selectedIngredients + recognized).distinctBy { it.id }
+                applyAiBrands(result.items)
+                detectionError = if (recognized.isEmpty()) {
+                    "Gemini didn't spot any cocktail ingredients — try a closer, better-lit " +
+                        "shot, or add them by hand below."
+                } else {
+                    null
+                }
+            }
+            // If Gemini fails, still salvage whatever the offline reader can get.
+            is GeminiResult.Error -> {
+                recognizeWithOcrAndClarifai(bitmap)
+                detectionError = buildString {
+                    append(result.message)
+                    if (selectedIngredients.isNotEmpty()) {
+                        append(" (Filled in what the offline reader could recognize.)")
+                    }
+                }
+            }
+        }
+    }
+
+    /** Turns Gemini's free-text brand + tier into on-the-fly [Brand]s for quality guidance. */
+    private fun applyAiBrands(items: List<GeminiItem>) {
+        val merged = detectedBrands.toMutableMap()
+        for (item in items) {
+            val ingredient = data.ingredientsById[item.ingredientId] ?: continue
+            val tier = when (item.tier?.lowercase(Locale.US)) {
+                "premium" -> BrandTier.PREMIUM
+                "mid" -> BrandTier.MID
+                "value" -> BrandTier.VALUE
+                else -> null
+            } ?: continue
+            val name = item.brand?.takeIf { it.isNotBlank() } ?: continue
+            val brand = Brand(
+                id = "ai_" + name.lowercase(Locale.US).replace(Regex("[^a-z0-9]+"), "_"),
+                name = name,
+                ingredientId = ingredient.id,
+                tier = tier,
+                keywords = emptyList(),
+            )
+            val existing = merged[ingredient.id].orEmpty()
+            if (existing.none { it.id == brand.id }) {
+                merged[ingredient.id] = existing + brand
+            }
+        }
+        detectedBrands = merged
+    }
+
+    private suspend fun recognizeWithOcrAndClarifai(bitmap: Bitmap) = coroutineScope {
+        // Run cloud concept recognition and on-device label OCR in parallel.
+        val conceptsJob = async {
+            val base64 = withContext(Dispatchers.Default) { ImageUtils.toBase64Jpeg(bitmap) }
+            ClarifaiClient(apiKey).recognize(base64)
+        }
+        val ocrJob = async { OcrReader.readText(bitmap) }
+
+        val ocrText = ocrJob.await().orEmpty()
+        val brands = brandDetector.detect(ocrText)
+        if (brands.isNotEmpty()) {
+            val merged = detectedBrands.toMutableMap()
+            for (brand in brands) {
+                val existing = merged[brand.ingredientId].orEmpty()
+                if (existing.none { it.id == brand.id }) {
+                    merged[brand.ingredientId] = existing + brand
+                }
+            }
+            detectedBrands = merged
+        }
+
+        val fromBrands = brands.mapNotNull { data.ingredientsById[it.ingredientId] }
+        val fromOcrWords = labelMapper.mapText(ocrText)
+
+        var apiError: String? = null
+        val fromConcepts = when (val result = conceptsJob.await()) {
+            is VisionResult.Success -> labelMapper.map(result.labels)
+            is VisionResult.Error -> {
+                apiError = result.message
+                emptyList()
+            }
+        }
+
+        val detected = (fromBrands + fromOcrWords + fromConcepts).distinctBy { it.id }
+        selectedIngredients = (selectedIngredients + detected).distinctBy { it.id }
+
+        detectionError = when {
+            detected.isEmpty() && apiError != null -> apiError
+            detected.isEmpty() ->
+                "No cocktail ingredients recognized in the photo — add them by hand below."
+            apiError != null ->
+                "Label text was read offline, but full image recognition failed: $apiError"
+            else -> null
         }
     }
 

@@ -9,17 +9,19 @@ cocktail recipes**, complete with smart ingredient substitutions.
 
 1. **Photograph your ingredients** (or pick a photo from the gallery, or select
    ingredients by hand — no camera required).
-2. Two recognition passes run in parallel:
-   - The photo is sent to **Clarifai's free image-recognition API** (the
-     `general-image-recognition` and `food-item-recognition` community models),
-     and the returned labels are mapped to canonical ingredients through an
-     alias dictionary (`"whisky"` → Bourbon, `"limes"` → Lime Juice, …).
-   - **ML Kit OCR reads the bottle labels on-device** (free, offline, no API
-     key) and matches the text against an offline **brand catalog with quality
-     tiers** — this is what tells a G4 from a Jose Cuervo, since generic image
-     models only ever see "a tequila bottle". Brand hits also imply their
-     ingredient, so a clearly-labeled bottle is recognized even if the cloud
-     model misses it (or you're offline).
+2. Recognition (primary path — **Google Gemini vision**):
+   - The photo is sent to Google's **Gemini** multimodal model, which reads
+     stylized bottle labels and *reasons* about what each item is — returning
+     the canonical ingredient (e.g. a Tapatío 110 Blanco bottle → **Tequila**),
+     plus the brand name and a quality tier where the label is legible. This is
+     far more robust than OCR keyword-matching, which stumbles on script fonts
+     and curved glass. Get a free key at
+     [aistudio.google.com](https://aistudio.google.com/) and paste it in
+     Settings.
+   - **Offline fallback** (used only when no Gemini key is set): **ML Kit OCR**
+     reads label text on-device and matches it against a bundled **brand catalog
+     with quality tiers**, alongside the optional legacy Clarifai models. This
+     path is brittle on decorative labels — Gemini is strongly recommended.
 3. You can review and edit the detected list — recognition of specific bottles
    is never perfect, so every detection is just a pre-filled suggestion.
 4. The **offline matching engine** scores every recipe in the bundled
@@ -32,8 +34,12 @@ cocktail recipes**, complete with smart ingredient substitutions.
    Results are split into **"Ready to pour"** and **"Almost there"** (missing
    at most two things), ranked by match quality.
 
-Only the Clarifai half of step 2 needs the network. OCR/brand detection,
-recipes, matching, substitutions, and browsing all work fully offline.
+Only the recognition step (step 2) needs the network. Recipes, matching,
+substitutions, browsing, and manual ingredient picking all work fully offline.
+
+When Gemini reads a brand it doesn't just name it — it assigns a quality tier,
+so the same "don't mask the good stuff" guidance (below) works for any bottle,
+not only the ones in the bundled catalog.
 
 ## Bottle quality — "don't mask the good stuff"
 
