@@ -62,6 +62,16 @@ class GeminiClientTest {
     }
 
     @Test
+    fun `defaults to a multi-model fallback chain`() {
+        // A single quota-limited model shouldn't be the whole story — on HTTP 429
+        // the client falls back to the next model's separate quota bucket.
+        val chain = GeminiClient(apiKey = "x").modelChain
+        assertTrue("expected at least two fallback models", chain.size >= 2)
+        assertEquals(chain.size, chain.toSet().size)
+        assertTrue(chain.all { it.startsWith("gemini-") })
+    }
+
+    @Test
     fun `every id Gemini is told to use exists in the real catalog`() {
         // The prompt lists real ids; make sure the catalog we would send is non-empty
         // and self-consistent so Gemini can only pick valid ids.

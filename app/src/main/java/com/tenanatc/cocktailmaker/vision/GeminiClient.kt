@@ -30,8 +30,25 @@ sealed class GeminiResult {
  */
 class GeminiClient(
     private val apiKey: String,
-    private val model: String = "gemini-2.0-flash",
+    /**
+     * Tried in order. Each model has its own separate free-tier quota bucket, so
+     * if one is rate-limited (HTTP 429) or unavailable (404), the next often
+     * still works.
+     */
+    private val models: List<String> = DEFAULT_MODELS,
 ) {
+
+    /** The model fallback order, exposed for tests. */
+    val modelChain: List<String> get() = models
+
+    /** Outcome of a single model attempt. */
+    private sealed class Attempt {
+        data class Ok(val items: List<GeminiItem>) : Attempt()
+        /** Worth trying another model (quota, model-not-found, server hiccup). */
+        data class TryNext(val message: String) : Attempt()
+        /** Won't improve by switching models (bad key, no network). */
+        data class Fatal(val message: String) : Attempt()
+    }
 
     /**
      * @param imageBase64 JPEG bytes, Base64-encoded (no line wraps).
@@ -46,7 +63,20 @@ class GeminiClient(
                 "No Gemini API key configured. Add one in Settings, or pick ingredients by hand."
             )
         }
-        try {
+        val body = requestBody(imageBase64, catalog)
+        var lastMessage = "Gemini returned no result."
+        for (model in models) {
+            when (val attempt = callModel(model, body)) {
+                is Attempt.Ok -> return@withContext GeminiResult.Success(attempt.items)
+                is Attempt.Fatal -> return@withContext GeminiResult.Error(attempt.message)
+                is Attempt.TryNext -> lastMessage = attempt.message
+            }
+        }
+        GeminiResult.Error(lastMessage)
+    }
+
+    private fun callModel(model: String, body: String): Attempt {
+        return try {
             val url = URL(
                 "https://generativelanguage.googleapis.com/v1beta/models/" +
                     "$model:generateContent?key=$apiKey"
@@ -59,21 +89,23 @@ class GeminiClient(
                 setRequestProperty("Content-Type", "application/json")
             }
             try {
-                conn.outputStream.use {
-                    it.write(requestBody(imageBase64, catalog).toByteArray(Charsets.UTF_8))
-                }
+                conn.outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
                 val code = conn.responseCode
                 val text = (if (code in 200..299) conn.inputStream else conn.errorStream)
                     ?.bufferedReader()?.use { it.readText() }.orEmpty()
-                if (code !in 200..299) {
-                    return@withContext GeminiResult.Error(apiErrorMessage(code, text))
+                when {
+                    code in 200..299 -> Attempt.Ok(parseItems(text))
+                    // Auth failures repeat across every model — stop now.
+                    code == 401 || code == 403 ->
+                        Attempt.Fatal(apiErrorMessage(code, text))
+                    // Quota, model-not-found, or transient server errors: try the next model.
+                    else -> Attempt.TryNext(apiErrorMessage(code, text))
                 }
-                GeminiResult.Success(parseItems(text))
             } finally {
                 conn.disconnect()
             }
         } catch (e: Exception) {
-            GeminiResult.Error("Couldn't reach Gemini: ${e.message ?: "unknown error"}")
+            Attempt.Fatal("Couldn't reach Gemini: ${e.message ?: "unknown error"}")
         }
     }
 
@@ -121,6 +153,16 @@ class GeminiClient(
     }
 
     private companion object {
+        /**
+         * Fallback chain. Vision-capable flash models, each with its own free-tier
+         * quota bucket, ordered strongest-first.
+         */
+        val DEFAULT_MODELS = listOf(
+            "gemini-2.0-flash",
+            "gemini-2.5-flash",
+            "gemini-2.0-flash-lite",
+        )
+
         /** Extracts the model's JSON answer from the API envelope and parses items. */
         fun parseItems(responseJson: String): List<GeminiItem> {
             val root = JSONObject(responseJson)
@@ -169,7 +211,9 @@ class GeminiClient(
         return when (code) {
             400 -> "Gemini rejected the request${detail?.let { ": $it" } ?: " (check the API key)."}"
             403 -> "The Gemini API key was rejected. Check it in Settings."
-            429 -> "Gemini quota exceeded for this key — try again later."
+            // Free-tier limits are per-model and often per-minute; the detail says which.
+            429 -> "Gemini free-tier limit hit — wait a minute and retry" +
+                (detail?.let { ". $it" } ?: ", or enable billing for higher limits.")
             in 500..599 -> "Gemini is having trouble right now — try again in a moment."
             else -> "Gemini error ($code)${detail?.let { ": $it" } ?: ""}"
         }
