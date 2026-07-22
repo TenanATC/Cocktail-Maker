@@ -8,3 +8,8 @@
 .externalNativeBuild
 .cxx
 app/build/
+
+# Installed reference skills (tooling, not app code)
+.agents/
+.claude/
+skills-lock.json

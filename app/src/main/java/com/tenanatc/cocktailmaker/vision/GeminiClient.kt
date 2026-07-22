@@ -154,13 +154,16 @@ class GeminiClient(
 
     private companion object {
         /**
-         * Fallback chain. Vision-capable flash models, each with its own free-tier
-         * quota bucket, ordered strongest-first.
+         * Fallback chain of current, vision-capable models — each has its own
+         * free-tier quota bucket, so a 429/404 on one rolls to the next. The
+         * legacy gemini-2.0/1.5 models are intentionally excluded: they are
+         * deprecated and their free tier returns 429 even on a first request,
+         * which is what caused the "rate limited after one photo" reports.
          */
         val DEFAULT_MODELS = listOf(
-            "gemini-2.0-flash",
-            "gemini-2.5-flash",
-            "gemini-2.0-flash-lite",
+            "gemini-2.5-flash",       // proven multimodal, established free tier
+            "gemini-3.5-flash-lite",  // fastest, most generous free-tier throughput
+            "gemini-3.6-flash",       // newest balanced multimodal
         )
 
         /** Extracts the model's JSON answer from the API envelope and parses items. */
